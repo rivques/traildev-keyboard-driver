@@ -1,0 +1,38 @@
+{
+    "device_name": "Traildev Matrix Keyboard",
+    "scanning_frequency": 100,
+    "col_set_delay_ms": 50,
+    "key_read_delay_ms": 0,
+    "keyboard_col_pins": [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+    ],
+    "keyboard_row_pins": [
+        4,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+    ],
+    "keymap": [
+        ["KEY_ESC", "KEY_1", "KEY_2", "KEY_3", "KEY_0", "KEY_MINUS", "KEY_EQUAL", "KEY_BACKSPACE"],
+        ["KEY_4", "KEY_5", "KEY_6", "KEY_7", "KEY_8", "KEY_9", "KEY_RIGHTBRACE", "KEY_BACKSLASH"],
+        ["KEY_TAB", "KEY_Q", "KEY_W", "KEY_E", "KEY_Y", "KEY_U", "KEY_P", "KEY_LEFTBRACE"],
+        ["KEY_R", "KEY_T", "KEY_G", "KEY_H", "KEY_I", "KEY_O", "KEY_APOSTROPHE", "KEY_ENTER"],
+        ["KEY_CAPSLOCK", "KEY_A", "KEY_S", "KEY_D", "KEY_J", "KEY_K", "KEY_L", "KEY_SEMICOLON"],
+        ["KEY_LEFTSHIFT", "KEY_Z", "KEY_X", "KEY_C", "KEY_F", "KEY_V", "KEY_SLASH", "KEY_RIGHTSHIFT"],
+        ["KEY_FN", "KEY_LEFTCTRL", "KEY_LEFTALT", "KEY_B", "KEY_N", "KEY_M", "KEY_COMMA", "KEY_DOT"],
+        ["KEY_LEFTMETA", "KEY_SPACE", "KEY_RIGHTALT", "KEY_RIGHTCTRL", "KEY_LEFT", "KEY_UP", "KEY_RIGHT", "KEY_DOWN"]
+    ]
+    
+    
+}
