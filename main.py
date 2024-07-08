@@ -27,7 +27,7 @@ def create_device():
 def setup_pins():
     GPIO.setmode(GPIO.BCM)
     for row_pin in config['keyboard_row_pins']:
-        GPIO.setup(row_pin, GPIO.IN)
+        GPIO.setup(row_pin, GPIO.IN, GPIO.PUD_DOWN)
 
     for col_pin in config['keyboard_col_pins']:
         GPIO.setup(col_pin, GPIO.OUT)
@@ -48,7 +48,7 @@ def main():
     if DO_SEND_KEYS:
         uinput, keymap = create_device()
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
-
+    last_start = time.time()
     while True:
         for c, col_pin in enumerate(config['keyboard_col_pins']):
             key_states = test_col(col_pin, config['keyboard_row_pins'])
@@ -66,7 +66,9 @@ def main():
                         events = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         uinput.send_events(events)
                 old_state[r][c] = state
-        time.sleep(1/config['scanning_frequency'])
+        time_elapsed = time.time() - last_start
+        time.sleep(max(1/config['scanning_frequency']-time_elapsed,0))
+        last_start = time.time()
     
 if __name__ == '__main__':
     main()

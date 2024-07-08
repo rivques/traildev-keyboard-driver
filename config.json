@@ -1,7 +1,7 @@
 {
     "device_name": "Traildev Matrix Keyboard",
     "scanning_frequency": 100,
-    "col_set_delay_ms": 50,
+    "col_set_delay_ms": 0.5,
     "key_read_delay_ms": 0,
     "keyboard_col_pins": [
         20,
