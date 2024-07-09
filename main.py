@@ -77,6 +77,7 @@ def main():
                     repeat_states[r][c]["down_time"] = time.time()
                     if DO_SEND_KEYS:
                         if old_state[fn_key[0]][fn_key[1]]:
+                            print(f'FN key is pressed')
                             events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         else:
                             events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
