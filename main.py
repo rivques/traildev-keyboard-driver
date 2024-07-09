@@ -61,16 +61,20 @@ def main():
                     if state and time.time() - repeat_states[r][c]["down_time"] > config["repeat_start_delay_ms"] and time.time() - repeat_states[r][c]["last_repeat"] > config["repeat_interval_ms"]:
                         print(f'Repeating {r}, {c} (key {config["keymap"][r][c]})')
                         if DO_SEND_KEYS:
-                            if keymap[r][c] == "KEY_FN":
-                                events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                            if config['keymap'][r][c] == "KEY_FN":
+                                downevents = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                                upevents = [libevdev.InputEvent(fn_keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                             else:
-                                events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                                downevents = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                                upevents = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                            uinput.send_events(downevents)
+                            uinput.send_events(upevents)
                         repeat_states[r][c]["last_repeat"] = time.time()
-                if state:
+                elif state:
                     print(f'Pressed {r}, {c} (key {config["keymap"][r][c]})')
                     repeat_states[r][c]["down_time"] = time.time()
                     if DO_SEND_KEYS:
-                        if keymap[r][c] == "KEY_FN":
+                        if config['keymap'][r][c] == "KEY_FN":
                             events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         else:
                             events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
@@ -78,10 +82,11 @@ def main():
                 else:
                     print(f'Released {r}, {c} (key {config["keymap"][r][c]})')
                     if DO_SEND_KEYS:
-                        if keymap[r][c] == "KEY_FN":
+                        if config['keymap'][r][c] == "KEY_FN":
                             events = [libevdev.InputEvent(fn_keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         else:
                             events = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                        uinput.send_events(events)
                 old_state[r][c] = state
         time_elapsed = time.time() - last_start
         time.sleep(max(1/config['scanning_frequency']-time_elapsed,0))
