@@ -50,6 +50,12 @@ def main():
     setup_pins()
     if DO_SEND_KEYS:
         uinput, keymap, fn_keymap = create_device()
+    # search keymap for fn key
+    for r, row in enumerate(config['keymap']):
+        for c, key in enumerate(row):
+            if key == "KEY_FN":
+                fn_key = (r, c)
+                break
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     repeat_states = [[{"down_time": 0, "last_repeat": 0} for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     last_start = time.time()
@@ -58,10 +64,10 @@ def main():
             key_states = test_col(col_pin, config['keyboard_row_pins'])
             for r, state in enumerate(key_states):
                 if state == old_state[r][c]:
-                    if state and time.time() - repeat_states[r][c]["down_time"] > config["repeat_start_delay_ms"] and time.time() - repeat_states[r][c]["last_repeat"] > config["repeat_interval_ms"]:
+                    if state and time.time() - repeat_states[r][c]["down_time"] > config["repeat_start_delay_ms"]/1000 and time.time() - repeat_states[r][c]["last_repeat"] > config["repeat_interval_ms"]/1000:
                         print(f'Repeating {r}, {c} (key {config["keymap"][r][c]})')
                         if DO_SEND_KEYS:
-                            if config['keymap'][r][c] == "KEY_FN":
+                            if old_state[fn_key[0]][fn_key[1]]:
                                 downevents = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                                 upevents = [libevdev.InputEvent(fn_keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                             else:
@@ -74,7 +80,7 @@ def main():
                     print(f'Pressed {r}, {c} (key {config["keymap"][r][c]})')
                     repeat_states[r][c]["down_time"] = time.time()
                     if DO_SEND_KEYS:
-                        if config['keymap'][r][c] == "KEY_FN":
+                        if old_state[fn_key[0]][fn_key[1]]:
                             events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         else:
                             events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
@@ -82,7 +88,7 @@ def main():
                 else:
                     print(f'Released {r}, {c} (key {config["keymap"][r][c]})')
                     if DO_SEND_KEYS:
-                        if config['keymap'][r][c] == "KEY_FN":
+                        if old_state[fn_key[0]][fn_key[1]]:
                             events = [libevdev.InputEvent(fn_keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         else:
                             events = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
