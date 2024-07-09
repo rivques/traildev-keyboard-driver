@@ -51,16 +51,7 @@ def main():
     if DO_SEND_KEYS:
         uinput, keymap, fn_keymap = create_device()
     # search keymap for fn key
-    fn_key = None
-    print("searching for fn key")
-    for r, row in enumerate(config['keymap']):
-        for c, key in enumerate(row):
-            print(f"key at {r}, {c}: {key}")
-            if key.startswith("KEY_FN"):
-                print(f'Found fn key at {r}, {c}')
-                fn_key = (r, c)
-                break
-        print("fn key not in row " + str(r))
+    fn_key = (config['fn_key_row'], config['fn_key_col'])
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     repeat_states = [[{"down_time": 0, "last_repeat": 0} for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     last_start = time.time()

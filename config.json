@@ -43,6 +43,8 @@
         ["KEY_FN", "KEY_LEFTCTRL", "KEY_LEFTALT", "KEY_B", "KEY_N", "KEY_M", "KEY_COMMA", "KEY_DOT"],
         ["KEY_LEFTMETA", "KEY_SPACE", "KEY_RIGHTALT", "KEY_RIGHTCTRL", "KEY_HOME", "KEY_PAGEUP", "KEY_END", "KEY_PAGEDOWN"]
     ],
+    "fn_key_row": 6,
+    "fn_key_col": 0,
     "repeat_start_delay_ms": 500,
     "repeat_interval_ms": 100    
 }
