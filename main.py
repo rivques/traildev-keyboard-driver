@@ -55,6 +55,7 @@ def main():
     print("searching for fn key")
     for r, row in enumerate(config['keymap']):
         for c, key in enumerate(row):
+            print(f"key at {r}, {c}: {key}")
             if key == "KEY_FN":
                 print(f'Found fn key at {r}, {c}')
                 fn_key = (r, c)
