@@ -52,12 +52,14 @@ def main():
         uinput, keymap, fn_keymap = create_device()
     # search keymap for fn key
     fn_key = None
+    print("searching for fn key")
     for r, row in enumerate(config['keymap']):
         for c, key in enumerate(row):
             if key == "KEY_FN":
                 print(f'Found fn key at {r}, {c}')
                 fn_key = (r, c)
                 break
+        print("fn key not in row " + str(r))
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     repeat_states = [[{"down_time": 0, "last_repeat": 0} for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     last_start = time.time()
