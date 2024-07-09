@@ -10,8 +10,8 @@ def create_device():
     device = libevdev.Device()
     device.name = config['device_name']
 
-    keymap = config['keymap']
-    fn_keymap = config['fn_keymap']
+    keymap = config['keymap'].copy()
+    fn_keymap = config['fn_keymap'].copy()
 
     row_length = len(keymap[0])
     for r, row in enumerate(keymap):
