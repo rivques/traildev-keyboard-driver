@@ -32,7 +32,17 @@
         ["KEY_LEFTSHIFT", "KEY_Z", "KEY_X", "KEY_C", "KEY_F", "KEY_V", "KEY_SLASH", "KEY_RIGHTSHIFT"],
         ["KEY_FN", "KEY_LEFTCTRL", "KEY_LEFTALT", "KEY_B", "KEY_N", "KEY_M", "KEY_COMMA", "KEY_DOT"],
         ["KEY_LEFTMETA", "KEY_SPACE", "KEY_RIGHTALT", "KEY_RIGHTCTRL", "KEY_LEFT", "KEY_UP", "KEY_RIGHT", "KEY_DOWN"]
-    ]
-    
-    
+    ],
+    "fn_keymap": [
+        ["KEY_GRAVE", "KEY_F1", "KEY_F2", "KEY_F3", "KEY_F10", "KEY_F11", "KEY_F12", "KEY_DELETE"],
+        ["KEY_F4", "KEY_F5", "KEY_F6", "KEY_F7", "KEY_F8", "KEY_F9", "KEY_RIGHTBRACE", "KEY_BACKSLASH"],
+        ["KEY_TAB", "KEY_Q", "KEY_W", "KEY_E", "KEY_Y", "KEY_U", "KEY_P", "KEY_LEFTBRACE"],
+        ["KEY_R", "KEY_T", "KEY_G", "KEY_H", "KEY_I", "KEY_O", "KEY_APOSTROPHE", "KEY_ENTER"],
+        ["KEY_CAPSLOCK", "KEY_A", "KEY_S", "KEY_D", "KEY_J", "KEY_K", "KEY_L", "KEY_SEMICOLON"],
+        ["KEY_LEFTSHIFT", "KEY_Z", "KEY_X", "KEY_C", "KEY_F", "KEY_V", "KEY_SLASH", "KEY_RIGHTSHIFT"],
+        ["KEY_FN", "KEY_LEFTCTRL", "KEY_LEFTALT", "KEY_B", "KEY_N", "KEY_M", "KEY_COMMA", "KEY_DOT"],
+        ["KEY_LEFTMETA", "KEY_SPACE", "KEY_RIGHTALT", "KEY_RIGHTCTRL", "KEY_HOME", "KEY_PAGEUP", "KEY_END", "KEY_PAGEDOWN"]
+    ],
+    "repeat_start_delay_ms": 500,
+    "repeat_interval_ms": 100    
 }

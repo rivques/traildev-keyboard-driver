@@ -11,6 +11,7 @@ def create_device():
     device.name = config['device_name']
 
     keymap = config['keymap']
+    fn_keymap = config['fn_keymap']
 
     row_length = len(keymap[0])
     for r, row in enumerate(keymap):
@@ -19,10 +20,12 @@ def create_device():
         for c, key in enumerate(row):
             keymap[r][c] = libevdev.evbit(key)
             device.enable(keymap[r][c])
+            fn_keymap[r][c] = libevdev.evbit(fn_keymap[r][c])
+            device.enable(fn_keymap[r][c])
 
     uinput = device.create_uinput_device()
     print(f'Created device {uinput.devnode}')
-    return uinput, keymap
+    return uinput, keymap, fn_keymap
 
 def setup_pins():
     GPIO.setmode(GPIO.BCM)
@@ -46,25 +49,39 @@ def test_col(col_pin, row_pins):
 def main():
     setup_pins()
     if DO_SEND_KEYS:
-        uinput, keymap = create_device()
+        uinput, keymap, fn_keymap = create_device()
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
+    repeat_states = [[{"down_time": 0, "last_repeat": 0} for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
     last_start = time.time()
     while True:
         for c, col_pin in enumerate(config['keyboard_col_pins']):
             key_states = test_col(col_pin, config['keyboard_row_pins'])
             for r, state in enumerate(key_states):
                 if state == old_state[r][c]:
-                    continue
+                    if state and time.time() - repeat_states[r][c]["down_time"] > config["repeat_start_delay_ms"] and time.time() - repeat_states[r][c]["last_repeat"] > config["repeat_interval_ms"]:
+                        print(f'Repeating {r}, {c} (key {config["keymap"][r][c]})')
+                        if DO_SEND_KEYS:
+                            if keymap[r][c] == "KEY_FN":
+                                events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                            else:
+                                events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                        repeat_states[r][c]["last_repeat"] = time.time()
                 if state:
                     print(f'Pressed {r}, {c} (key {config["keymap"][r][c]})')
+                    repeat_states[r][c]["down_time"] = time.time()
                     if DO_SEND_KEYS:
-                        events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                        if keymap[r][c] == "KEY_FN":
+                            events = [libevdev.InputEvent(fn_keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                        else:
+                            events = [libevdev.InputEvent(keymap[r][c], 1), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                         uinput.send_events(events)
                 else:
                     print(f'Released {r}, {c} (key {config["keymap"][r][c]})')
                     if DO_SEND_KEYS:
-                        events = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
-                        uinput.send_events(events)
+                        if keymap[r][c] == "KEY_FN":
+                            events = [libevdev.InputEvent(fn_keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
+                        else:
+                            events = [libevdev.InputEvent(keymap[r][c], 0), libevdev.InputEvent(libevdev.EV_SYN.SYN_REPORT, 0)]
                 old_state[r][c] = state
         time_elapsed = time.time() - last_start
         time.sleep(max(1/config['scanning_frequency']-time_elapsed,0))
