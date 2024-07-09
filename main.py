@@ -51,9 +51,11 @@ def main():
     if DO_SEND_KEYS:
         uinput, keymap, fn_keymap = create_device()
     # search keymap for fn key
+    fn_key = None
     for r, row in enumerate(config['keymap']):
         for c, key in enumerate(row):
             if key == "KEY_FN":
+                print(f'Found fn key at {r}, {c}')
                 fn_key = (r, c)
                 break
     old_state = [[False for _ in config['keyboard_col_pins']] for _ in config['keyboard_row_pins']]
