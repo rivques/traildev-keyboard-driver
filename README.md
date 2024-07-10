@@ -16,18 +16,21 @@ Use `j`, `k`, `->`, and `<-` to scroll around.
 1. TURN OFF THE TRAILDEV.
 2. Plug in the Arduino/Pico/whatever.
 3. Turn on the TRAILDEV.
-4. Go to `~/traildev-code` and pick your project.
-5. Run `arduino-cli board list` and note which serial port your board is using and its FQBN.
-6. Run `arduino-cli upload -p PORT --fqbn FQBN YourSketchName`, replacing PORT, FQBN, and YourSketchName with the appropriate values.
+4. Go to `~/trail-code` and pick your project.
+5. Run `arduino-cli board list` and note which serial port your board is using and its FQBN (if you're using a Pico and it's unknown, try `rp2042:rp2040:rpipico`).
+6. Run `arduino-cli compile --fqbn FQBN YourSketchName.ino`
+7. Run `arduino-cli upload -p PORT --fqbn FQBN YourSketchName`, replacing PORT, FQBN, and YourSketchName with the appropriate values.
 ## Reflash a TRAILDEV
 1. Plug SD card reader into Pi.
 2. `ls /dev | grep sd` to see where it showed up (probably `/dev/sda`.)
 3. Run `sudo dd if=/dev/mmcblk0 of=/dev/sda bs=4M status=progress` and wait for it to finish.
 4. Run `sudo sync`.
 5. Remove the SD card reader.
-
 ## Other Info
 The TRAILDEV has a better life of 5 to 10 hours, depending on the battery.
+The BT key is actually ESC, but becomes backtick/tilde with the FN key.
+Holding the FN key also turns the arrows into pageup etc., 
+and the Backspace key into Delete.
 
 # Troubleshooting stuff you shouldn't have to do
 ## Display setup
